@@ -1,24 +1,30 @@
 import 'package:flutter_chat_app/domain/entity/user.dart';
+import 'package:flutter_chat_app/domain/usecase/user_usecase.dart';
+import 'package:flutter_chat_app/presentation/provider/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final userListProvider = StateNotifierProvider<UserListNotifier, List<User>>(
-    (ref) => UserListNotifier());
+    (ref) => UserListNotifier(ref.read(getUsersUseCaseProvider)));
 
 class UserListNotifier extends StateNotifier<List<User>> {
-  UserListNotifier()
-      : super([
-          User(id: '0', email: 'test1@gmail.com', name: 'user1', age: 20, gender: Gender.male, isReceptionAllowed: true),
-          User(id: '1', email: 'test2@gmail.com', name: 'user2', age: 30, gender: Gender.female, isReceptionAllowed: false),
-          User(id: '2', email: 'test3@gmail.com', name: 'user3', age: 40, gender: Gender.male, isReceptionAllowed: true),
-        ]) {
-    sortWithReceptionAllowed();
+  final GetUsersUseCase getUsersUseCase;
+
+  UserListNotifier(this.getUsersUseCase)
+      : super([]) {
+    _fetchAllUsers();
   }
 
-  void sortWithReceptionAllowed() {
-    var newList = List<User>.from(state);
+  void _fetchAllUsers() async {
+    final users = await getUsersUseCase();
+
+    state = sortWithReceptionAllowed(users);
+  }
+
+  List<User> sortWithReceptionAllowed(List<User> users) {
+    var newList = List<User>.from(users);
     newList.sort((a, b) => b.isReceptionAllowed == a.isReceptionAllowed
         ? 0 : a.isReceptionAllowed ? -1 : 1);
 
-    state = newList;
+    return newList;
   }
 }
