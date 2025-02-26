@@ -18,9 +18,17 @@ class User {
 
 enum Gender {
   male('male'),
-  female('female');
+  female('female'),
+  undefined('undefined');
 
   final String label;
 
   const Gender(this.label);
+
+  factory Gender.fromLabel(String label) {
+    return Gender.values.firstWhere(
+      (value) => value.label == label,
+      orElse: () => Gender.undefined,
+    );
+  }
 }
