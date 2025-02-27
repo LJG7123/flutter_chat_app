@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/presentation/screen/chats/widget/chat_message_input.dart';
 import 'package:flutter_chat_app/presentation/screen/chats/widget/chat_message_list.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ChatRoomScreen extends ConsumerWidget {
+class ChatRoomScreen extends StatelessWidget {
   final String otherUserId;
 
   const ChatRoomScreen({super.key, required this.otherUserId});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(otherUserId)),
       body: Column(
         children: [
           Expanded(child: ChatMessageList()),
-
+          ChatMessageInput(),
         ],
       ),
     );
