@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/presentation/provider/chat_message_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class ChatMessageInput extends ConsumerStatefulWidget {
   final String? chatRoomId;
+  final String otherUserId;
 
-  const ChatMessageInput(this.chatRoomId, {super.key});
+  const ChatMessageInput(this.chatRoomId, this.otherUserId, {super.key});
 
   @override
   ConsumerState<ChatMessageInput> createState() => _ChatMessageInputState();
@@ -73,10 +75,21 @@ class _ChatMessageInputState extends ConsumerState<ChatMessageInput> {
   }
 
   void _handleMessageSubmitted() async {
+    if (_textController.text.isEmpty) return;
+
     final userId = 'me';
-    await ref
+    final chatRoomId = await ref
         .read(chatMessageProvider(widget.chatRoomId).notifier)
-        .sendMessage(userId, _textController.text);
+        .sendMessage(userId, widget.otherUserId, _textController.text);
     _textController.clear();
+
+    if (widget.chatRoomId == null) {
+      if (mounted) {
+        context.pushReplacement('/chatroom', extra: {
+          'chatRoomId': chatRoomId,
+          'otherUserId': widget.otherUserId,
+        });
+      }
+    }
   }
 }

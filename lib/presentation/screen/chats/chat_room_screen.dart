@@ -15,7 +15,7 @@ class ChatRoomScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(child: ChatMessageList(chatRoomId)),
-          ChatMessageInput(chatRoomId),
+          ChatMessageInput(chatRoomId, otherUserId),
         ],
       ),
     );
