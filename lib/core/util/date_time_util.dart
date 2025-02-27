@@ -18,4 +18,20 @@ extension DateTimeExtension on DateTime {
 
     return '$ap $hh:$mm';
   }
+
+  String toDateString() {
+    return '$year년 $month월 $day일';
+  }
+
+  bool isDateSame(DateTime time) {
+    return year == time.year && month == time.month && day == time.day;
+  }
+
+  bool isTimeSame(DateTime time) {
+    return year == time.year &&
+        month == time.month &&
+        day == time.day &&
+        hour == time.hour &&
+        minute == time.minute;
+  }
 }
