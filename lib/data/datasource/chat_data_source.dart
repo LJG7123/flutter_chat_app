@@ -12,4 +12,13 @@ class ChatDataSource {
         .orderBy('lastMessageTime', descending: true)
         .snapshots();
   }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getMessages(String chatRoomId) {
+    return _firestore
+        .collection('chats')
+        .doc(chatRoomId)
+        .collection('messages')
+        .orderBy('sentTime', descending: true)
+        .snapshots();
+  }
 }
