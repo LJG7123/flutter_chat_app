@@ -6,16 +6,25 @@ import 'package:flutter_chat_app/presentation/provider/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final chatMessageProvider = StateNotifierProvider.autoDispose
-    .family<ChatMessageNotifier, List<Message>, String?>((ref, chatRoomId) =>
-        ChatMessageNotifier(chatRoomId, ref.read(getMessagesUseCaseProvider)));
+    .family<ChatMessageNotifier, List<Message>, String?>(
+  (ref, chatRoomId) => ChatMessageNotifier(
+    chatRoomId,
+    ref.read(getMessagesUseCaseProvider),
+    ref.read(sendMessageUseCaseProvider),
+  ),
+);
 
 class ChatMessageNotifier extends StateNotifier<List<Message>> {
   final String? chatRoomId;
   final GetMessagesUseCase getMessagesUseCase;
+  final SendMessageUseCase sendMessageUseCase;
   StreamSubscription? _subscription;
 
-  ChatMessageNotifier(this.chatRoomId, this.getMessagesUseCase)
-      : super([]) {
+  ChatMessageNotifier(
+    this.chatRoomId,
+    this.getMessagesUseCase,
+    this.sendMessageUseCase,
+  ) : super([]) {
     _fetchMessages();
   }
 
@@ -37,5 +46,13 @@ class ChatMessageNotifier extends StateNotifier<List<Message>> {
         state = event;
       },
     );
+  }
+
+  Future<void> sendMessage(String senderId, String content) async {
+    if (chatRoomId == null) {
+      return;
+    }
+
+    return sendMessageUseCase(chatRoomId!, senderId, content);
   }
 }

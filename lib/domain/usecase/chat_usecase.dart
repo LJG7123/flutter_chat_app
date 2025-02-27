@@ -21,3 +21,13 @@ class GetMessagesUseCase {
     return _repository.getMessages(chatRoomId);
   }
 }
+
+class SendMessageUseCase {
+  final ChatRepository _repository;
+
+  SendMessageUseCase(this._repository);
+
+  Future<void> call(String chatRoomId, String senderId, String content) {
+    return _repository.sendMessage(chatRoomId, senderId, content);
+  }
+}
