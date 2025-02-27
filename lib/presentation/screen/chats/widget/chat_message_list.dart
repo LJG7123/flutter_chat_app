@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ChatMessageList extends ConsumerWidget {
   final String? chatRoomId;
 
-  const ChatMessageList({super.key, this.chatRoomId});
+  const ChatMessageList(this.chatRoomId, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
