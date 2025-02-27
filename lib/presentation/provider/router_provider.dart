@@ -12,10 +12,16 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => HomeScreen(),
       ),
       GoRoute(
-        path: '/chatroom/:id',
+        path: '/chatroom',
         builder: (context, state) {
-          final otherUserId = state.pathParameters['id'] ?? '';
-          return ChatRoomScreen(otherUserId: otherUserId);
+          final params = state.extra as Map;
+          final chatRoomId = params['chatRoomId'];
+          final otherUserId = params['otherUserId'] ?? '';
+
+          return ChatRoomScreen(
+            chatRoomId: chatRoomId,
+            otherUserId: otherUserId,
+          );
         },
       )
     ],

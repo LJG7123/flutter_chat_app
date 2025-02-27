@@ -30,7 +30,10 @@ class ChatListItem extends ConsumerWidget {
         ],
       ),
       onTap: () {
-        context.push('/chatroom/$otherUserId');
+        context.push('/chatroom', extra: {
+          'chatRoomId': chat.id,
+          'otherUserId': otherUserId,
+        });
       },
     );
   }

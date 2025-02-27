@@ -5,11 +5,13 @@ import 'package:flutter_chat_app/presentation/screen/chats/widget/chat_message_i
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ChatMessageList extends ConsumerWidget {
-  const ChatMessageList({super.key});
+  final String? chatRoomId;
+
+  const ChatMessageList({super.key, this.chatRoomId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final messages = ref.watch(chatMessageProvider);
+    final messages = ref.watch(chatMessageProvider(chatRoomId));
     final userId = 'me';
 
     return Align(
