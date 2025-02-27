@@ -35,6 +35,11 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
+  Future<String> createChat(String senderId, String otherUserId) {
+    return _dataSource.createChat(senderId, otherUserId);
+  }
+
+  @override
   Future<void> sendMessage(String chatRoomId, String senderId, String content) {
     return _dataSource.sendMessage(chatRoomId, senderId, content);
   }

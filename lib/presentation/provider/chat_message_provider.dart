@@ -10,6 +10,7 @@ final chatMessageProvider = StateNotifierProvider.autoDispose
   (ref, chatRoomId) => ChatMessageNotifier(
     chatRoomId,
     ref.read(getMessagesUseCaseProvider),
+    ref.read(createChatUseCaseProvider),
     ref.read(sendMessageUseCaseProvider),
   ),
 );
@@ -17,12 +18,14 @@ final chatMessageProvider = StateNotifierProvider.autoDispose
 class ChatMessageNotifier extends StateNotifier<List<Message>> {
   final String? chatRoomId;
   final GetMessagesUseCase getMessagesUseCase;
+  final CreateChatUseCase createChatUseCase;
   final SendMessageUseCase sendMessageUseCase;
   StreamSubscription? _subscription;
 
   ChatMessageNotifier(
     this.chatRoomId,
     this.getMessagesUseCase,
+    this.createChatUseCase,
     this.sendMessageUseCase,
   ) : super([]) {
     _fetchMessages();
@@ -48,11 +51,16 @@ class ChatMessageNotifier extends StateNotifier<List<Message>> {
     );
   }
 
-  Future<void> sendMessage(String senderId, String content) async {
-    if (chatRoomId == null) {
-      return;
+  Future<String?> sendMessage(
+      String senderId, String otherUserId, String content) async {
+    String? chatId;
+
+    if (content.isNotEmpty) {
+      chatId = chatRoomId ?? await createChatUseCase(senderId, otherUserId);
+
+      await sendMessageUseCase(chatId, senderId, content);
     }
 
-    return sendMessageUseCase(chatRoomId!, senderId, content);
+    return chatId;
   }
 }

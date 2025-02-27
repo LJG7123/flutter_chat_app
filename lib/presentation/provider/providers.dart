@@ -31,5 +31,7 @@ final getChatsUseCaseProvider = Provider<GetChatsUseCase>(
     (ref) => GetChatsUseCase(ref.read(chatRepositoryProvider)));
 final getMessagesUseCaseProvider = Provider<GetMessagesUseCase>(
     (ref) => GetMessagesUseCase(ref.read(chatRepositoryProvider)));
+final createChatUseCaseProvider = Provider<CreateChatUseCase>(
+    (ref) => CreateChatUseCase(ref.read(chatRepositoryProvider)));
 final sendMessageUseCaseProvider = Provider<SendMessageUseCase>(
     (ref) => SendMessageUseCase(ref.read(chatRepositoryProvider)));

@@ -23,6 +23,15 @@ class ChatDataSource {
         .snapshots();
   }
 
+  Future<String> createChat(String senderId, String otherUserId) async {
+    final chatRoomId = (await _firestore.collection('chats').add({
+      'participants': [senderId, otherUserId],
+      'unreadCount': 0,
+    })).id;
+
+    return chatRoomId;
+  }
+
   Future<void> sendMessage(
       String chatRoomId, String senderId, String content) async {
     final timestamp = Timestamp.now();
