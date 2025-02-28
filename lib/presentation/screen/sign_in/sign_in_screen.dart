@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/presentation/provider/auth_provider.dart';
 import 'package:flutter_chat_app/presentation/widget/expanded_button.dart';
 import 'package:flutter_chat_app/presentation/widget/expanded_progress_button.dart';
 import 'package:flutter_chat_app/presentation/widget/general_text_field.dart';
@@ -32,14 +34,36 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           spacing: 8,
           children: [
             Spacer(),
-            GeneralTextField(controller: _emailController, hintText: '아이디',),
-            ObscureTextField(controller: _passwordController, hintText: '패스워드',),
-            ExpandedProgressButton(onPressed: () async {}, text: '로그인'),
+            GeneralTextField(
+              controller: _emailController,
+              hintText: '아이디',
+            ),
+            ObscureTextField(
+              controller: _passwordController,
+              hintText: '패스워드',
+            ),
+            ExpandedProgressButton(onPressed: _singIn, text: '로그인'),
             Spacer(),
             ExpandedButton(onPressed: () {}, text: '회원가입'),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _singIn() async {
+    try {
+      await ref.read(authProvider.notifier).signIn(
+            _emailController.text,
+            _passwordController.text,
+          );
+    } on FirebaseAuthException catch (e) {
+      _showSnackBar(e.code);
+    }
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 }
