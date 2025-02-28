@@ -1,11 +1,12 @@
 import 'package:flutter_chat_app/presentation/screen/chats/chat_room_screen.dart';
 import 'package:flutter_chat_app/presentation/screen/home_screen.dart';
+import 'package:flutter_chat_app/presentation/screen/sign_in/sign_in_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/sign_in',
     routes: [
       GoRoute(
         path: '/',
@@ -23,7 +24,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             otherUserId: otherUserId,
           );
         },
-      )
+      ),
+      GoRoute(
+        path: '/sign_in',
+        builder: (context, state) => SignInScreen(),
+      ),
     ],
   );
 });
