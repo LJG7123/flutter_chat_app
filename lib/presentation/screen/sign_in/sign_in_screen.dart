@@ -6,6 +6,7 @@ import 'package:flutter_chat_app/presentation/widget/expanded_progress_button.da
 import 'package:flutter_chat_app/presentation/widget/general_text_field.dart';
 import 'package:flutter_chat_app/presentation/widget/obscure_text_field.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
@@ -44,7 +45,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
             ),
             ExpandedProgressButton(onPressed: _singIn, text: '로그인'),
             Spacer(),
-            ExpandedButton(onPressed: () {}, text: '회원가입'),
+            ExpandedButton(onPressed: () {
+              context.push('/sign_up');
+            }, text: '회원가입'),
           ],
         ),
       ),
