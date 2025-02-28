@@ -2,6 +2,7 @@ import 'package:flutter_chat_app/presentation/provider/auth_provider.dart';
 import 'package:flutter_chat_app/presentation/screen/chats/chat_room_screen.dart';
 import 'package:flutter_chat_app/presentation/screen/home_screen.dart';
 import 'package:flutter_chat_app/presentation/screen/sign_in/sign_in_screen.dart';
+import 'package:flutter_chat_app/presentation/screen/sign_up/sign_up_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -11,9 +12,9 @@ final routerProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
     initialLocation: '/',
     redirect: (context, state) {
-      final user = ref.read(authProvider).value;
-
       if (ref.read(authProvider).isLoading) return null;
+
+      final user = ref.read(authProvider).value;
       if (user != null && authLocation.contains(state.matchedLocation)) {
         return '/';
       }
@@ -45,12 +46,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/sign_in',
         builder: (context, state) => SignInScreen(),
       ),
+      GoRoute(
+        path: '/sign_up',
+        builder: (context, state) => SignUpScreen(),
+      ),
     ],
   );
 
-  ref.listen(
-    authProvider.select((async) => async.value),
-    (previous, next) {
+  ref.listen(authProvider, (previous, next) {
       router.refresh();
     },
   );
