@@ -14,4 +14,12 @@ class UserDataSource {
   Future<DocumentSnapshot<Map<String, dynamic>>> getUser(String userId) async {
     return _firestore.collection('users').doc(userId).get();
   }
+
+  Future<AggregateQuerySnapshot> getEmailCount(String email) {
+    return _firestore
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .count()
+        .get();
+  }
 }

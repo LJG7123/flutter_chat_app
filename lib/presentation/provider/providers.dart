@@ -53,3 +53,5 @@ final signOutUseCaseProvider = Provider<SignOutUseCase>(
 final getCurrentUserUseCaseProvider = Provider<GetCurrentUserUseCase>((ref) =>
     GetCurrentUserUseCase(
         ref.read(authRepositoryProvider), ref.read(userRepositoryProvider)));
+final isEmailAvailableUseCaseProvider = Provider<IsEmailAvailableUseCase>(
+    (ref) => IsEmailAvailableUseCase(ref.read(userRepositoryProvider)));

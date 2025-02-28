@@ -25,4 +25,11 @@ class UserRepositoryImpl implements UserRepository {
 
     return model.toEntity();
   }
+
+  @override
+  Future<bool> isEmailAvailable(String email) async {
+    final snapshot = await _dataSource.getEmailCount(email);
+
+    return snapshot.count == 0;
+  }
 }

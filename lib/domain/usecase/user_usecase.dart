@@ -10,3 +10,13 @@ class GetUsersUseCase {
     return _repository.getUsers();
   }
 }
+
+class IsEmailAvailableUseCase {
+  final UserRepository _repository;
+
+  IsEmailAvailableUseCase(this._repository);
+
+  Future<bool> call(String email) {
+    return _repository.isEmailAvailable(email);
+  }
+}
