@@ -16,6 +16,16 @@ class SignInUseCase {
   }
 }
 
+class SignOutUseCase {
+  final AuthRepository _repository;
+
+  SignOutUseCase(this._repository);
+
+  Future<void> call() {
+    return _repository.signOut();
+  }
+}
+
 class GetCurrentUserUseCase {
   final AuthRepository _authRepository;
   final UserRepository _userRepository;

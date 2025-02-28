@@ -48,6 +48,8 @@ final sendMessageUseCaseProvider = Provider<SendMessageUseCase>(
     (ref) => SendMessageUseCase(ref.read(chatRepositoryProvider)));
 final signInUseCaseProvider = Provider<SignInUseCase>((ref) => SignInUseCase(
     ref.read(authRepositoryProvider), ref.read(userRepositoryProvider)));
+final signOutUseCaseProvider = Provider<SignOutUseCase>(
+    (ref) => SignOutUseCase(ref.read(authRepositoryProvider)));
 final getCurrentUserUseCaseProvider = Provider<GetCurrentUserUseCase>((ref) =>
     GetCurrentUserUseCase(
         ref.read(authRepositoryProvider), ref.read(userRepositoryProvider)));

@@ -14,6 +14,10 @@ class AuthDataSource {
     return userCredential.user;
   }
 
+  Future<void> signOut() {
+    return _firebaseAuth.signOut();
+  }
+
   User? getCurrentUser() {
     return _firebaseAuth.currentUser;
   }
