@@ -3,8 +3,9 @@ import 'package:flutter_chat_app/domain/usecase/user_usecase.dart';
 import 'package:flutter_chat_app/presentation/provider/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final userListProvider = StateNotifierProvider<UserListNotifier, List<User>>(
-    (ref) => UserListNotifier(ref.read(getUsersUseCaseProvider)));
+final userListProvider =
+    StateNotifierProvider.autoDispose<UserListNotifier, List<User>>(
+        (ref) => UserListNotifier(ref.read(getUsersUseCaseProvider)));
 
 class UserListNotifier extends StateNotifier<List<User>> {
   final GetUsersUseCase getUsersUseCase;

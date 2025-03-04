@@ -5,8 +5,9 @@ import 'package:flutter_chat_app/domain/usecase/chat_usecase.dart';
 import 'package:flutter_chat_app/presentation/provider/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final chatListProvider = StateNotifierProvider<ChatListNotifier, List<Chat>>(
-    (ref) => ChatListNotifier(ref.read(getChatsUseCaseProvider)));
+final chatListProvider =
+    StateNotifierProvider.autoDispose<ChatListNotifier, List<Chat>>(
+        (ref) => ChatListNotifier(ref.read(getChatsUseCaseProvider)));
 
 class ChatListNotifier extends StateNotifier<List<Chat>> {
   final GetChatsUseCase getChatsUseCase;

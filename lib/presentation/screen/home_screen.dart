@@ -4,11 +4,10 @@ import 'package:flutter_chat_app/presentation/screen/settings/settings_screen.da
 import 'package:flutter_chat_app/presentation/screen/users/user_list_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final currentIndexProvider = StateProvider<int>((ref) => 0);
-
 class HomeScreen extends ConsumerWidget {
   HomeScreen({super.key});
-  
+
+  final _currentIndexProvider = StateProvider<int>((ref) => 0);
   final _pages = <Widget>[
     UserListScreen(),
     ChatListScreen(),
@@ -17,7 +16,7 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentIndex = ref.watch(currentIndexProvider);
+    final currentIndex = ref.watch(_currentIndexProvider);
 
     return Scaffold(
       body: IndexedStack(
@@ -26,7 +25,7 @@ class HomeScreen extends ConsumerWidget {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
-        onTap: (value) => ref.read(currentIndexProvider.notifier).state = value,
+        onTap: (value) => ref.read(_currentIndexProvider.notifier).state = value,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.person), label: '유저'),
           BottomNavigationBarItem(icon: Icon(Icons.chat), label: '채팅'),
