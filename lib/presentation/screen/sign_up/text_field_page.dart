@@ -5,7 +5,7 @@ import 'package:flutter_chat_app/presentation/widget/general_text_field.dart';
 import 'package:flutter_chat_app/presentation/widget/obscure_text_field.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SignUpPage extends ConsumerWidget {
+class TextFieldPage extends ConsumerWidget {
   final TextEditingController controller;
   final String title;
   final String subTitle;
@@ -14,7 +14,7 @@ class SignUpPage extends ConsumerWidget {
   final TextInputType? inputType;
   final bool obscureText;
 
-  const SignUpPage({
+  const TextFieldPage({
     required this.controller,
     required this.title,
     required this.subTitle,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/domain/entity/user.dart';
 import 'package:flutter_chat_app/presentation/provider/auth_provider.dart';
-import 'package:flutter_chat_app/presentation/screen/sign_up/sign_up_page.dart';
+import 'package:flutter_chat_app/presentation/screen/sign_up/selection_page.dart';
+import 'package:flutter_chat_app/presentation/screen/sign_up/text_field_page.dart';
 import 'package:flutter_chat_app/presentation/widget/expanded_progress_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -13,32 +15,35 @@ class SignUpScreen extends ConsumerStatefulWidget {
 }
 
 class _SignUpScreenState extends ConsumerState<SignUpScreen> {
-  static const _pageCount = 4;
+  static const _pageCount = 5;
   final _pageController = PageController();
   final _currentPageProvider = StateProvider<int>((ref) => 0);
   final _isValidProvider = StateProvider<bool>((ref) => false);
   final _textControllers =
-      List.generate(_pageCount, (_) => TextEditingController());
+      List.generate(_pageCount - 1, (_) => TextEditingController());
+  String _selectedGender = Gender.values.first.label;
   final _errorTextProviders =
-      List.generate(_pageCount, (_) => StateProvider<String?>((ref) => null));
+      List.generate(_pageCount - 1, (_) => StateProvider<String?>((ref) => null));
   late final List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
     ref.listenManual(_currentPageProvider, (previous, next) {
-      ref.read(_isValidProvider.notifier).state =
-          _isTextFilled(next, _textControllers[next]);
+      if (next < 4) {
+        ref.read(_isValidProvider.notifier).state =
+            _isTextFilled(next, _textControllers[next]);
+      }
     });
     _pages = [
-      SignUpPage(
+      TextFieldPage(
         controller: _textControllers[0],
         title: '이메일 주소 입력',
         subTitle: '회원님에게 연락할 수 있는 이메일 주소를 입력해 주세요.',
         hintText: '이메일',
         errorProvider: _errorTextProviders[0],
       ),
-      SignUpPage(
+      TextFieldPage(
         controller: _textControllers[1],
         title: '비밀번호 만들기',
         subTitle:
@@ -47,7 +52,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         errorProvider: _errorTextProviders[1],
         obscureText: true,
       ),
-      SignUpPage(
+      TextFieldPage(
         controller: _textControllers[2],
         title: '생년월일 입력',
         subTitle: '회원님의 실제 생년월일을 입력해 주세요.',
@@ -55,13 +60,16 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         inputType: TextInputType.datetime,
         errorProvider: _errorTextProviders[2],
       ),
-      SignUpPage(
+      TextFieldPage(
         controller: _textControllers[3],
         title: '이름 입력',
         hintText: '이름',
         subTitle: '회원님의 이름을 입력해 주세요.',
         errorProvider: _errorTextProviders[3],
       ),
+      SelectionPage(onChanged: (value) {
+        if (value != null) _selectedGender = value;
+      }),
     ];
     for (var (index, controller) in _textControllers.indexed) {
       controller.addListener(() {

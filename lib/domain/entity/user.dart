@@ -17,9 +17,9 @@ class User {
 }
 
 enum Gender {
-  male('male'),
-  female('female'),
-  undefined('undefined');
+  male('남자'),
+  female('여자'),
+  undefined('비공개');
 
   final String label;
 
