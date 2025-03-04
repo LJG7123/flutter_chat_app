@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/presentation/provider/user_list_provider.dart';
+import 'package:flutter_chat_app/presentation/screen/users/widget/filter_dialog.dart';
 import 'package:flutter_chat_app/presentation/screen/users/widget/user_list_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,10 +22,17 @@ class UserListScreen extends ConsumerWidget {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () => _showFilterDialog(context),
         icon: Icon(Icons.filter_alt),
         label: Text('필터'),
       ),
+    );
+  }
+
+  void _showFilterDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => FilterDialog(),
     );
   }
 }
