@@ -60,8 +60,11 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
             _emailController.text,
             _passwordController.text,
           );
+      _showSnackBar('로그인에 성공했습니다.');
     } on FirebaseAuthException catch (e) {
-      _showSnackBar(e.code);
+      _showSnackBar('로그인에 실패했습니다.');
+    } catch (e) {
+      _showSnackBar('로그인 도중 오류가 발생했습니다.');
     }
   }
 
