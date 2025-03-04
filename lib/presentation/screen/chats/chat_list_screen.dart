@@ -12,14 +12,25 @@ class ChatListScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text('채팅')),
-      body: ListView.builder(
-        itemCount: chats.length,
-        itemBuilder: (context, index) {
-          final chat = chats[index];
+      body: chats.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.chat_bubble_outline, size: 48),
+                  SizedBox(height: 16),
+                  Text('채팅방이 없습니다', style: TextStyle(fontSize: 16)),
+                ],
+              ),
+            )
+          : ListView.builder(
+              itemCount: chats.length,
+              itemBuilder: (context, index) {
+                final chat = chats[index];
 
-          return ChatListItem(chat);
-        },
-      ),
+                return ChatListItem(chat);
+              },
+            ),
     );
   }
 }
