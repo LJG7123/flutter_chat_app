@@ -22,8 +22,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final _textControllers =
       List.generate(_pageCount - 1, (_) => TextEditingController());
   String _selectedGender = Gender.values.first.label;
-  final _errorTextProviders =
-      List.generate(_pageCount - 1, (_) => StateProvider<String?>((ref) => null));
+  final _errorTextProviders = List.generate(
+      _pageCount - 1, (_) => StateProvider<String?>((ref) => null));
   late final List<Widget> _pages;
 
   @override
@@ -123,13 +123,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       if (currentPage < _pageCount - 1) {
         _toNextPage(currentPage);
       } else {
-        _completeSignUp();
+        await _completeSignUp();
       }
     }
   }
 
   Future<bool> _validateInput(int page) async {
     AuthNotifier notifier = ref.read(authProvider.notifier);
+    if (page > 3) return true;
     String input = _textControllers[page].text;
 
     if (input.isEmpty) {
@@ -195,5 +196,23 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     };
   }
 
-  void _completeSignUp() {}
+  Future<void> _completeSignUp() async {
+    try {
+      await ref.read(authProvider.notifier).signUp(
+            _textControllers[0].text,
+            _textControllers[1].text,
+            DateTime.parse(_textControllers[2].text),
+            _textControllers[3].text,
+            _selectedGender,
+          );
+      _showSnackBar('회원가입이 완료되었습니다.');
+    } catch (e) {
+      _showSnackBar('회원가입에 실패했습니다.');
+    }
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
 }

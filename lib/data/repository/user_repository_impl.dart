@@ -27,6 +27,12 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
+  Future<void> createUser(String userId, String email, String name,
+      DateTime dob, String gender) async {
+    return _dataSource.createUser(userId, email, name, dob, gender);
+  }
+
+  @override
   Future<bool> isEmailAvailable(String email) async {
     final snapshot = await _dataSource.getEmailCount(email);
 

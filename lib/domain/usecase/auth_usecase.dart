@@ -16,6 +16,21 @@ class SignInUseCase {
   }
 }
 
+class SignUpUseCase {
+  final AuthRepository _authRepository;
+  final UserRepository _userRepository;
+
+  SignUpUseCase(this._authRepository, this._userRepository);
+
+  Future<void> call(String email, String password, DateTime dob, String name,
+      String gender) async {
+    final uid = await _authRepository.signUp(email, password);
+    if (uid == null) return;
+
+    return _userRepository.createUser(uid, email, name, dob, gender);
+  }
+}
+
 class SignOutUseCase {
   final AuthRepository _repository;
 

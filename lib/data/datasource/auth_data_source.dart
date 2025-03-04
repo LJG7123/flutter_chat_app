@@ -14,6 +14,15 @@ class AuthDataSource {
     return userCredential.user;
   }
 
+  Future<User?> signUp(String email, String password) async {
+    final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    return userCredential.user;
+  }
+
   Future<void> signOut() {
     return _firebaseAuth.signOut();
   }

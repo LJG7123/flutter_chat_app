@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_chat_app/data/model/user_model.dart';
 
 class UserDataSource {
   final FirebaseFirestore _firestore;
@@ -13,6 +14,17 @@ class UserDataSource {
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getUser(String userId) async {
     return _firestore.collection('users').doc(userId).get();
+  }
+
+  Future<void> createUser(String userId, String email, String name,
+      DateTime dob, String gender) async {
+    return _firestore.collection('users').doc(userId).set({
+      'email': email,
+      'name': name,
+      'dob': Timestamp.fromDate(dob),
+      'gender': gender,
+      'isReceptionAllowed': true,
+    });
   }
 
   Future<AggregateQuerySnapshot> getEmailCount(String email) {

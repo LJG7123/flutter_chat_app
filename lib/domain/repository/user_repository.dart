@@ -5,5 +5,8 @@ abstract interface class UserRepository {
 
   Future<User?> getUser(String userId);
 
+  Future<void> createUser(
+      String userId, String email, String name, DateTime dob, String gender);
+
   Future<bool> isEmailAvailable(String email);
 }

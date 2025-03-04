@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final authProvider = StateNotifierProvider<AuthNotifier, AsyncValue<User?>>(
     (ref) => AuthNotifier(
           ref.read(signInUseCaseProvider),
+          ref.read(signUpUseCaseProvider),
           ref.read(signOutUseCaseProvider),
           ref.read(getCurrentUserUseCaseProvider),
           ref.read(isEmailAvailableUseCaseProvider),
@@ -15,12 +16,14 @@ final authProvider = StateNotifierProvider<AuthNotifier, AsyncValue<User?>>(
 
 class AuthNotifier extends StateNotifier<AsyncValue<User?>> {
   final SignInUseCase signInUseCase;
+  final SignUpUseCase signUpUseCase;
   final SignOutUseCase signOutUseCase;
   final GetCurrentUserUseCase getCurrentUserUseCase;
   final IsEmailAvailableUseCase isEmailAvailableUseCase;
 
   AuthNotifier(
     this.signInUseCase,
+    this.signUpUseCase,
     this.signOutUseCase,
     this.getCurrentUserUseCase,
     this.isEmailAvailableUseCase,
@@ -36,6 +39,11 @@ class AuthNotifier extends StateNotifier<AsyncValue<User?>> {
   Future<void> signIn(String email, String password) async {
     final user = await signInUseCase(email, password);
     state = AsyncData(user);
+  }
+
+  Future<void> signUp(String email, String password, DateTime dob, String name, String gender) async {
+    await signUpUseCase(email, password, dob, name, gender);
+    await signIn(email, password);
   }
 
   Future<void> signOut() async {
