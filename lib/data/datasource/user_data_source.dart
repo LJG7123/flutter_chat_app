@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_chat_app/data/model/user_model.dart';
 
 class UserDataSource {
   final FirebaseFirestore _firestore;
