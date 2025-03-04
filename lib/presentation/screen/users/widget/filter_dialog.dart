@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/domain/entity/user.dart';
+import 'package:flutter_chat_app/presentation/provider/user_list_provider.dart';
 import 'package:flutter_chat_app/presentation/widget/general_text_field.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class FilterDialog extends StatefulWidget {
+class FilterDialog extends ConsumerStatefulWidget {
   const FilterDialog({super.key});
 
   @override
-  State<FilterDialog> createState() => _FilterDialogState();
+  ConsumerState<FilterDialog> createState() => _FilterDialogState();
 }
 
-class _FilterDialogState extends State<FilterDialog> {
+class _FilterDialogState extends ConsumerState<FilterDialog> {
   Set<Gender> selection = {};
   final _textControllers = List.generate(2, (index) => TextEditingController());
+
+  @override
+  void dispose() {
+    for (var element in _textControllers) {
+      element.dispose();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +41,7 @@ class _FilterDialogState extends State<FilterDialog> {
                   controller: _textControllers[0],
                   inputType: TextInputType.number,
                   padding: EdgeInsets.all(8),
+                  hintText: '최소',
                   isDense: true,
                 ),
               ),
@@ -40,6 +51,7 @@ class _FilterDialogState extends State<FilterDialog> {
                   controller: _textControllers[1],
                   inputType: TextInputType.number,
                   padding: EdgeInsets.all(8),
+                  hintText: '최대',
                   isDense: true,
                 ),
               ),
@@ -72,8 +84,30 @@ class _FilterDialogState extends State<FilterDialog> {
       ),
       actions: [
         TextButton(onPressed: context.pop, child: Text('취소')),
-        TextButton(onPressed: () {}, child: Text('적용')),
+        TextButton(onPressed: _applyFilter, child: Text('적용')),
       ],
     );
+  }
+
+  void _applyFilter() async {
+    int? min = int.tryParse(_textControllers[0].text);
+    int? max = int.tryParse(_textControllers[1].text);
+
+    if (min != null && max != null && min > max) {
+      _showSnackBar('나이 최소값이 최대값보다 클 수 없습니다.');
+      return;
+    }
+
+    await ref.read(userListProvider.notifier).filterUsers(min, max, selection);
+
+    if (mounted) {
+      context.pop();
+      _showSnackBar('필터를 적용했습니다.');
+    }
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 }

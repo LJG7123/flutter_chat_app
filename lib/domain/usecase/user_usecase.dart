@@ -21,6 +21,20 @@ class GetUserUseCase {
   }
 }
 
+class GetUsersWithFilterUseCase {
+  final UserRepository _repository;
+
+  GetUsersWithFilterUseCase(this._repository);
+
+  Future<List<User>> call(int? min, int? max, Set<Gender> genders) {
+    int nowYear = DateTime.now().year;
+    DateTime? minYear = max != null ? DateTime(nowYear - max + 1) : null;
+    DateTime? maxYear = min != null ? DateTime(nowYear - min + 1) : null;
+
+    return _repository.getUsersWithFilter(minYear, maxYear, genders);
+  }
+}
+
 class IsEmailAvailableUseCase {
   final UserRepository _repository;
 

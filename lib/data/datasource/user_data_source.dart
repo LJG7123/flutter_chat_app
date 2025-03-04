@@ -15,6 +15,24 @@ class UserDataSource {
     return _firestore.collection('users').doc(userId).get();
   }
 
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getUsersWithFilter(
+      DateTime? min, DateTime? max, Set<String> genders) async {
+    final ref = _firestore.collection('users');
+
+    var filtered = min != null
+        ? ref.where('dob', isGreaterThanOrEqualTo: Timestamp.fromDate(min))
+        : ref;
+    filtered = max != null
+        ? filtered.where('dob', isLessThanOrEqualTo: Timestamp.fromDate(max))
+        : filtered;
+    filtered = genders.isNotEmpty
+        ? filtered.where('gender', whereIn: genders)
+        : filtered;
+
+    final snapshot = await filtered.get();
+    return snapshot.docs;
+  }
+
   Future<void> createUser(String userId, String email, String name,
       DateTime dob, String gender) async {
     return _firestore.collection('users').doc(userId).set({

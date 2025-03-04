@@ -8,18 +8,28 @@ final userListProvider =
         (ref) => UserListNotifier(
               ref.read(getUsersUseCaseProvider),
               ref.read(getUserUseCaseProvider),
+              ref.read(getUsersWithFilterUseCaseProvider),
             ));
 
 class UserListNotifier extends StateNotifier<List<User>> {
   final GetUsersUseCase getUsersUseCase;
   final GetUserUseCase getUserUseCase;
+  final GetUsersWithFilterUseCase getUsersWithFilterUseCase;
 
-  UserListNotifier(this.getUsersUseCase, this.getUserUseCase) : super([]) {
+  UserListNotifier(
+      this.getUsersUseCase, this.getUserUseCase, this.getUsersWithFilterUseCase)
+      : super([]) {
     _fetchAllUsers();
   }
 
   void _fetchAllUsers() async {
     final users = await getUsersUseCase();
+
+    state = sortWithReceptionAllowed(users);
+  }
+
+  Future<void> filterUsers(int? min, int? max, Set<Gender> genders) async {
+    final users = await getUsersWithFilterUseCase(min, max, genders);
 
     state = sortWithReceptionAllowed(users);
   }

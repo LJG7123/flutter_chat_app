@@ -5,6 +5,9 @@ abstract interface class UserRepository {
 
   Future<User?> getUser(String userId);
 
+  Future<List<User>> getUsersWithFilter(
+      DateTime? min, DateTime? max, Set<Gender> genders);
+
   Future<void> createUser(
       String userId, String email, String name, DateTime dob, String gender);
 

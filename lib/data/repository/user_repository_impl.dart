@@ -27,6 +27,17 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
+  Future<List<User>> getUsersWithFilter(
+      DateTime? min, DateTime? max, Set<Gender> genders) async {
+    final snapshot = await _dataSource.getUsersWithFilter(
+        min, max, genders.map((e) => e.label).toSet());
+
+    return snapshot
+        .map((doc) => UserModel.fromJson(doc.id, doc.data()).toEntity())
+        .toList();
+  }
+
+  @override
   Future<void> createUser(String userId, String email, String name,
       DateTime dob, String gender) async {
     return _dataSource.createUser(userId, email, name, dob, gender);
