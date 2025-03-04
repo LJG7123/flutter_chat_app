@@ -11,6 +11,16 @@ class GetUsersUseCase {
   }
 }
 
+class GetUserUseCase {
+  final UserRepository _repository;
+
+  GetUserUseCase(this._repository);
+
+  Future<User?> call(String userId) {
+    return _repository.getUser(userId);
+  }
+}
+
 class IsEmailAvailableUseCase {
   final UserRepository _repository;
 

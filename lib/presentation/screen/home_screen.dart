@@ -4,10 +4,11 @@ import 'package:flutter_chat_app/presentation/screen/settings/settings_screen.da
 import 'package:flutter_chat_app/presentation/screen/users/user_list_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final _currentIndexProvider = StateProvider.autoDispose<int>((ref) => 0);
+
 class HomeScreen extends ConsumerWidget {
   HomeScreen({super.key});
 
-  final _currentIndexProvider = StateProvider<int>((ref) => 0);
   final _pages = <Widget>[
     UserListScreen(),
     ChatListScreen(),

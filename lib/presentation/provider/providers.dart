@@ -38,6 +38,8 @@ final authRepositoryProvider = Provider<AuthRepository>(
 // UseCase Providers
 final getUsersUseCaseProvider = Provider<GetUsersUseCase>(
     (ref) => GetUsersUseCase(ref.read(userRepositoryProvider)));
+final getUserUseCaseProvider = Provider<GetUserUseCase>(
+    (ref) => GetUserUseCase(ref.read(userRepositoryProvider)));
 final getChatsUseCaseProvider = Provider<GetChatsUseCase>(
     (ref) => GetChatsUseCase(ref.read(chatRepositoryProvider)));
 final getMessagesUseCaseProvider = Provider<GetMessagesUseCase>(

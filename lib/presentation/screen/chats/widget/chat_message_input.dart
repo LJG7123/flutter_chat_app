@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/presentation/provider/auth_provider.dart';
 import 'package:flutter_chat_app/presentation/provider/chat_message_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -77,7 +78,8 @@ class _ChatMessageInputState extends ConsumerState<ChatMessageInput> {
   void _handleMessageSubmitted() async {
     if (_textController.text.isEmpty) return;
 
-    final userId = 'me';
+    final userId = ref.read(authProvider).value?.id;
+    if (userId == null) return;
     final chatRoomId = await ref
         .read(chatMessageProvider(widget.chatRoomId).notifier)
         .sendMessage(userId, widget.otherUserId, _textController.text);

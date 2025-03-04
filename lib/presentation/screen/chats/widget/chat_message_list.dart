@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/core/util/date_time_util.dart';
+import 'package:flutter_chat_app/presentation/provider/auth_provider.dart';
 import 'package:flutter_chat_app/presentation/provider/chat_message_provider.dart';
 import 'package:flutter_chat_app/presentation/screen/chats/widget/chat_message_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +13,7 @@ class ChatMessageList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final messages = ref.watch(chatMessageProvider(chatRoomId));
-    final userId = 'me';
+    final userId = ref.read(authProvider).value?.id;
 
     return Align(
       alignment: Alignment.topCenter,

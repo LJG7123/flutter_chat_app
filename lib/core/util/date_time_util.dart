@@ -23,6 +23,10 @@ extension DateTimeExtension on DateTime {
     return '$year년 $month월 $day일';
   }
 
+  int toAge() {
+    return DateTime.now().year - year + 1;
+  }
+
   bool isDateSame(DateTime time) {
     return year == time.year && month == time.month && day == time.day;
   }
