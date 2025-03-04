@@ -2,7 +2,7 @@ class User {
   final String id;
   final String email;
   final String name;
-  final int age;
+  final DateTime dob;
   final Gender gender;
   final bool isReceptionAllowed;
 
@@ -10,7 +10,7 @@ class User {
     required this.id,
     required this.email,
     required this.name,
-    required this.age,
+    required this.dob,
     required this.gender,
     required this.isReceptionAllowed,
   });

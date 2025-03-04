@@ -1,10 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_chat_app/domain/entity/user.dart';
 
 class UserModel {
   final String id;
   final String email;
   final String name;
-  final int age;
+  final Timestamp dob;
   final String gender;
   final bool isReceptionAllowed;
 
@@ -12,7 +13,7 @@ class UserModel {
     required this.id,
     required this.email,
     required this.name,
-    required this.age,
+    required this.dob,
     required this.gender,
     required this.isReceptionAllowed,
   });
@@ -22,7 +23,7 @@ class UserModel {
       id: id,
       email: json['email'],
       name: json['name'],
-      age: json['age'],
+      dob: json['dob'],
       gender: json['gender'],
       isReceptionAllowed: json['isReceptionAllowed'],
     );
@@ -33,7 +34,7 @@ class UserModel {
       id: id,
       email: email,
       name: name,
-      age: age,
+      dob: dob.toDate(),
       gender: Gender.fromLabel(gender),
       isReceptionAllowed: isReceptionAllowed,
     );
