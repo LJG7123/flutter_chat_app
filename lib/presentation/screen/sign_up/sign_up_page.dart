@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_chat_app/core/util/date_formatter.dart';
 import 'package:flutter_chat_app/presentation/widget/general_text_field.dart';
 import 'package:flutter_chat_app/presentation/widget/obscure_text_field.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,19 +36,40 @@ class SignUpPage extends ConsumerWidget {
         SizedBox(height: 12),
         Text(subTitle, style: TextStyle(fontSize: 14)),
         SizedBox(height: 36),
-        obscureText
-            ? ObscureTextField(
-                controller: controller,
-                hintText: hintText,
-                errorText: errorText,
-              )
-            : GeneralTextField(
-                controller: controller,
-                hintText: hintText,
-                errorText: errorText,
-                inputType: inputType,
-              ),
+        _buildTextField(errorText),
       ],
+    );
+  }
+
+  Widget _buildTextField(String? errorText) {
+    if (inputType == TextInputType.datetime) {
+      return TextField(
+        controller: controller,
+        keyboardType: inputType,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: hintText,
+          errorText: errorText,
+        ),
+        inputFormatters: [
+          FilteringTextInputFormatter(RegExp('[0-9-]'), allow: true),
+          LengthLimitingTextInputFormatter(10),
+          DateFormatter(),
+        ],
+      );
+    }
+    if (obscureText) {
+      return ObscureTextField(
+        controller: controller,
+        hintText: hintText,
+        errorText: errorText,
+      );
+    }
+    return GeneralTextField(
+      controller: controller,
+      hintText: hintText,
+      errorText: errorText,
+      inputType: inputType,
     );
   }
 }

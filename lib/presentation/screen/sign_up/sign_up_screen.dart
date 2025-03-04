@@ -16,6 +16,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   static const _pageCount = 4;
   final _pageController = PageController();
   final _currentPageProvider = StateProvider<int>((ref) => 0);
+  final _isValidProvider = StateProvider<bool>((ref) => false);
   final _textControllers =
       List.generate(_pageCount, (_) => TextEditingController());
   final _errorTextProviders =
@@ -25,6 +26,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   @override
   void initState() {
     super.initState();
+    ref.listenManual(_currentPageProvider, (previous, next) {
+      ref.read(_isValidProvider.notifier).state =
+          _isTextFilled(next, _textControllers[next]);
+    });
     _pages = [
       SignUpPage(
         controller: _textControllers[0],
@@ -44,10 +49,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       ),
       SignUpPage(
         controller: _textControllers[2],
-        title: '나이 입력',
-        subTitle: '회원님의 실제 나이를 입력해 주세요.',
-        hintText: '나이',
-        inputType: TextInputType.number,
+        title: '생년월일 입력',
+        subTitle: '회원님의 실제 생년월일을 입력해 주세요.',
+        hintText: 'YYYY-MM-DD',
+        inputType: TextInputType.datetime,
         errorProvider: _errorTextProviders[2],
       ),
       SignUpPage(
@@ -58,10 +63,19 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         errorProvider: _errorTextProviders[3],
       ),
     ];
+    for (var (index, controller) in _textControllers.indexed) {
+      controller.addListener(() {
+        ref.read(_errorTextProviders[index].notifier).state = null;
+        ref.read(_isValidProvider.notifier).state =
+            _isTextFilled(index, controller);
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final isValid = ref.watch(_isValidProvider);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -83,7 +97,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 children: _pages,
               ),
             ),
-            ExpandedProgressButton(onPressed: _onNextButtonClicked, text: '다음'),
+            ExpandedProgressButton(
+              onPressed: isValid ? _onNextButtonClicked : null,
+              text: '다음',
+            ),
           ],
         ),
       ),
@@ -112,7 +129,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       return false;
     }
     if (page == 0) {
-      bool isAvailable = await notifier.isEmailAvailableUseCase(input);
+      bool isAvailable = await notifier.isEmailAvailable(input);
       if (!isAvailable) {
         _setError(page, '이미 사용중이거나 사용할 수 없는 이메일입니다.');
         return false;
@@ -122,6 +139,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       bool isAvailable = notifier.isPasswordAvailable(input);
       if (!isAvailable) {
         _setError(page, '사용할 수 없는 비밀번호입니다.');
+        return false;
+      }
+    }
+    if (page == 2) {
+      bool isAvailable = notifier.isDoBAvailable(input);
+      if (!isAvailable) {
+        _setError(page, '유효하지 않은 생년월일입니다.');
         return false;
       }
     }
@@ -153,6 +177,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   void _setError(int page, String text) {
     ref.read(_errorTextProviders[page].notifier).state = text;
+  }
+
+  bool _isTextFilled(int index, TextEditingController controller) {
+    return switch (index) {
+      1 => controller.text.length > 5,
+      2 => controller.text.length == 10,
+      int() => controller.text.isNotEmpty,
+    };
   }
 
   void _completeSignUp() {}

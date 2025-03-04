@@ -11,4 +11,11 @@ class Validator {
   static bool isPasswordValid(String password) {
     return passwordRegex.hasMatch(password);
   }
+
+  static bool isDoBValid(String dob) {
+    final date = DateTime.tryParse(dob);
+
+    if (date == null) return false;
+    return date.isBefore(DateTime.now()) && date.isAfter(DateTime(1900));
+  }
 }

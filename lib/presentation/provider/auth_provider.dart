@@ -51,4 +51,8 @@ class AuthNotifier extends StateNotifier<AsyncValue<User?>> {
   bool isPasswordAvailable(String password) {
     return Validator.isPasswordValid(password);
   }
+
+  bool isDoBAvailable(String dob) {
+    return Validator.isDoBValid(dob);
+  }
 }
