@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ExpandedProgressButton extends ConsumerWidget {
-  final AsyncCallback onPressed;
+  final AsyncCallback? onPressed;
   final String text;
   final _isLoadingProvider = StateProvider<bool>((ref) => false);
 
   ExpandedProgressButton({
     super.key,
-    required this.onPressed,
+    this.onPressed,
     required this.text,
   });
 
@@ -21,7 +21,8 @@ class ExpandedProgressButton extends ConsumerWidget {
       width: double.infinity,
       height: 52,
       child: OutlinedButton(
-        onPressed: isLoading ? null : () => _onButtonPressed(ref),
+        onPressed:
+            onPressed == null || isLoading ? null : () => _onButtonPressed(ref),
         style: OutlinedButton.styleFrom(
           padding: EdgeInsets.all(8),
           backgroundColor: Colors.transparent,
@@ -38,8 +39,10 @@ class ExpandedProgressButton extends ConsumerWidget {
   }
 
   void _onButtonPressed(WidgetRef ref) async {
+    if (onPressed == null) return;
+
     ref.read(_isLoadingProvider.notifier).state = true;
-    await onPressed();
+    await onPressed!();
     ref.read(_isLoadingProvider.notifier).state = false;
   }
 }
