@@ -1,6 +1,7 @@
 import 'package:flutter_chat_app/core/util/validator.dart';
 import 'package:flutter_chat_app/domain/entity/user.dart';
 import 'package:flutter_chat_app/domain/usecase/auth_usecase.dart';
+import 'package:flutter_chat_app/domain/usecase/image_usecase.dart';
 import 'package:flutter_chat_app/domain/usecase/user_usecase.dart';
 import 'package:flutter_chat_app/presentation/provider/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +12,7 @@ final authProvider = StateNotifierProvider<AuthNotifier, AsyncValue<User?>>(
           ref.read(signUpUseCaseProvider),
           ref.read(signOutUseCaseProvider),
           ref.read(getCurrentUserUseCaseProvider),
+          ref.read(getProfileImageUrlUseCase),
           ref.read(isEmailAvailableUseCaseProvider),
         ));
 
@@ -19,6 +21,7 @@ class AuthNotifier extends StateNotifier<AsyncValue<User?>> {
   final SignUpUseCase signUpUseCase;
   final SignOutUseCase signOutUseCase;
   final GetCurrentUserUseCase getCurrentUserUseCase;
+  final GetProfileImageUrlUseCase getProfileImageUrlUseCase;
   final IsEmailAvailableUseCase isEmailAvailableUseCase;
 
   AuthNotifier(
@@ -26,6 +29,7 @@ class AuthNotifier extends StateNotifier<AsyncValue<User?>> {
     this.signUpUseCase,
     this.signOutUseCase,
     this.getCurrentUserUseCase,
+    this.getProfileImageUrlUseCase,
     this.isEmailAvailableUseCase,
   ) : super(AsyncLoading()) {
     _getCurrentUser();
@@ -49,6 +53,14 @@ class AuthNotifier extends StateNotifier<AsyncValue<User?>> {
   Future<void> signOut() async {
     await signOutUseCase();
     state = AsyncData(null);
+  }
+
+  void reloadProfileImage() async {
+    final user = state.value;
+    if (user == null) return;
+
+    final imageUrl = await getProfileImageUrlUseCase(user.id);
+    state = AsyncData(user.copyWith(imageUrl: imageUrl));
   }
 
   Future<bool> isEmailAvailable(String email) async {

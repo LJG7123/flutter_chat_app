@@ -1,5 +1,6 @@
 import 'package:flutter_chat_app/domain/entity/user.dart';
 import 'package:flutter_chat_app/domain/repository/auth_repository.dart';
+import 'package:flutter_chat_app/domain/repository/image_repository.dart';
 import 'package:flutter_chat_app/domain/repository/user_repository.dart';
 
 class SignInUseCase {
@@ -44,13 +45,18 @@ class SignOutUseCase {
 class GetCurrentUserUseCase {
   final AuthRepository _authRepository;
   final UserRepository _userRepository;
+  final ImageRepository _imageRepository;
 
-  GetCurrentUserUseCase(this._authRepository, this._userRepository);
+  GetCurrentUserUseCase(
+      this._authRepository, this._userRepository, this._imageRepository);
 
   Future<User?> call() async {
     final uid = _authRepository.getCurrentUser();
     if (uid == null) return null;
 
-    return _userRepository.getUser(uid);
+    final user = await _userRepository.getUser(uid);
+    final url = await _imageRepository.getProfileImageUrl(uid);
+
+    return user?.copyWith(imageUrl: url);
   }
 }
