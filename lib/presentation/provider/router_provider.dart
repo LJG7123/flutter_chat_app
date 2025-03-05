@@ -1,6 +1,7 @@
 import 'package:flutter_chat_app/presentation/provider/auth_provider.dart';
 import 'package:flutter_chat_app/presentation/screen/chats/chat_room_screen.dart';
 import 'package:flutter_chat_app/presentation/screen/home_screen.dart';
+import 'package:flutter_chat_app/presentation/screen/settings/edit_profile_screen.dart';
 import 'package:flutter_chat_app/presentation/screen/sign_in/sign_in_screen.dart';
 import 'package:flutter_chat_app/presentation/screen/sign_up/sign_up_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -50,10 +51,16 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/sign_up',
         builder: (context, state) => SignUpScreen(),
       ),
+      GoRoute(
+        path: '/edit_profile',
+        builder: (context, state) => EditProfileScreen(),
+      ),
     ],
   );
 
-  ref.listen(authProvider, (previous, next) {
+  ref.listen(
+    authProvider,
+    (previous, next) {
       router.refresh();
     },
   );
