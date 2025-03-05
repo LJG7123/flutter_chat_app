@@ -6,6 +6,7 @@ import 'package:flutter_chat_app/domain/entity/chat.dart';
 import 'package:flutter_chat_app/domain/entity/user.dart';
 import 'package:flutter_chat_app/presentation/provider/auth_provider.dart';
 import 'package:flutter_chat_app/presentation/provider/chat_list_provider.dart';
+import 'package:flutter_chat_app/presentation/widget/profile_image_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,6 +23,7 @@ class UserListItem extends ConsumerWidget {
       imageFilter: ImageFilter.blur(sigmaX: 2, sigmaY: 0),
       enabled: !user.isReceptionAllowed,
       child: ListTile(
+        leading: ProfileImageWidget(imageUrl: user.imageUrl),
         title: Text(user.name),
         subtitle: Text('${user.email} / ${user.gender.label} / ${user.dob.toAge()}'),
         onTap: user.id == currentUser?.id

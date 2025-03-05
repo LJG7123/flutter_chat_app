@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/presentation/provider/auth_provider.dart';
+import 'package:flutter_chat_app/presentation/widget/profile_image_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,14 +25,9 @@ class SettingsScreen extends ConsumerWidget {
                     context.push('/edit_profile');
                   },
                   padding: EdgeInsets.zero,
-                  icon: CircleAvatar(
+                  icon: ProfileImageWidget(
                     radius: imageRadius,
-                    backgroundImage: user?.imageUrl?.isNotEmpty ?? false
-                        ? NetworkImage(user!.imageUrl!)
-                        : null,
-                    child: user?.imageUrl?.isEmpty ?? true
-                        ? Icon(Icons.person, size: imageRadius)
-                        : null,
+                    imageUrl: user?.imageUrl,
                   ),
                 ),
               ),

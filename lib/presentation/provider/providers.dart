@@ -47,8 +47,9 @@ final imageRepositoryProvider = Provider<ImageRepository>(
     (ref) => ImageRepositoryImpl(ref.read(imageDataSourceProvider)));
 
 // UseCase Providers
-final getUsersUseCaseProvider = Provider<GetUsersUseCase>(
-    (ref) => GetUsersUseCase(ref.read(userRepositoryProvider)));
+final getUsersUseCaseProvider = Provider<GetUsersUseCase>((ref) =>
+    GetUsersUseCase(
+        ref.read(userRepositoryProvider), ref.read(imageRepositoryProvider)));
 final getUserUseCaseProvider = Provider<GetUserUseCase>((ref) => GetUserUseCase(
     ref.read(userRepositoryProvider), ref.read(imageRepositoryProvider)));
 final getUsersWithFilterUseCaseProvider = Provider<GetUsersWithFilterUseCase>(

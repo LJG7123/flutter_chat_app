@@ -34,7 +34,10 @@ class UserListNotifier extends StateNotifier<List<User>> {
     state = sortWithReceptionAllowed(users);
   }
 
-  Future<User?> getUser(String userId) {
+  Future<User?> getUser(String userId) async {
+    final user = state.where((e) => e.id == userId).firstOrNull;
+    if (user != null) return user;
+
     return getUserUseCase(userId);
   }
 

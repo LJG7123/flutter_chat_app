@@ -1,23 +1,36 @@
 import 'package:flutter_chat_app/domain/entity/user.dart';
+import 'package:flutter_chat_app/domain/repository/image_repository.dart';
 import 'package:flutter_chat_app/domain/repository/user_repository.dart';
 
 class GetUsersUseCase {
-  final UserRepository _repository;
+  final UserRepository _userRepository;
+  final ImageRepository _imageRepository;
 
-  GetUsersUseCase(this._repository);
+  GetUsersUseCase(this._userRepository, this._imageRepository);
 
-  Future<List<User>> call() {
-    return _repository.getUsers();
+  Future<List<User>> call() async {
+    final users = await _userRepository.getUsers();
+
+    return Future.wait(users.map((e) async {
+      final url = await _imageRepository.getProfileImageUrl(e.id);
+      return e.copyWith(imageUrl: url);
+    }));
   }
 }
 
 class GetUserUseCase {
-  final UserRepository _repository;
+  final UserRepository _userRepository;
+  final ImageRepository _imageRepository;
 
-  GetUserUseCase(this._repository);
+  GetUserUseCase(this._userRepository, this._imageRepository);
 
-  Future<User?> call(String userId) {
-    return _repository.getUser(userId);
+  Future<User?> call(String userId) async {
+    final [User? user, String url] = await Future.wait<dynamic>([
+      _userRepository.getUser(userId),
+      _imageRepository.getProfileImageUrl(userId),
+    ]);
+
+    return user?.copyWith(imageUrl: url);
   }
 }
 
