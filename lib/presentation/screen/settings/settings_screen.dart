@@ -9,6 +9,7 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authProvider).value;
+    final imageRadius = MediaQuery.of(context).size.width / 12;
 
     return Scaffold(
       appBar: AppBar(title: Text('설정')),
@@ -24,7 +25,13 @@ class SettingsScreen extends ConsumerWidget {
                   },
                   padding: EdgeInsets.zero,
                   icon: CircleAvatar(
-                    radius: MediaQuery.of(context).size.width / 12,
+                    radius: imageRadius,
+                    backgroundImage: user?.imageUrl?.isNotEmpty ?? false
+                        ? NetworkImage(user!.imageUrl!)
+                        : null,
+                    child: user?.imageUrl?.isEmpty ?? true
+                        ? Icon(Icons.person, size: imageRadius)
+                        : null,
                   ),
                 ),
               ),

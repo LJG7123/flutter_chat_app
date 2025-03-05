@@ -21,7 +21,11 @@ class EditProfileScreen extends ConsumerWidget {
           SizedBox(
             width: width,
             height: width,
-            child: selectedImage != null ? Image.file(selectedImage) : null,
+            child: selectedImage != null
+                ? Image.file(selectedImage)
+                : ref.read(authProvider).value?.imageUrl != null
+                    ? Image.network(ref.read(authProvider).value!.imageUrl!)
+                    : null,
           ),
           Spacer(),
           Padding(
