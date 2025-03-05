@@ -5,6 +5,7 @@ class User {
   final DateTime dob;
   final Gender gender;
   final bool isReceptionAllowed;
+  final String? imageUrl;
 
   User({
     required this.id,
@@ -13,7 +14,28 @@ class User {
     required this.dob,
     required this.gender,
     required this.isReceptionAllowed,
+    this.imageUrl,
   });
+
+  User copyWith({
+    String? id,
+    String? email,
+    String? name,
+    DateTime? dob,
+    Gender? gender,
+    bool? isReceptionAllowed,
+    String? imageUrl,
+  }) {
+    return User(
+      id: id ?? this.id,
+      email: email ?? this.email,
+      name: name ?? this.name,
+      dob: dob ?? this.dob,
+      gender: gender ?? this.gender,
+      isReceptionAllowed: isReceptionAllowed ?? this.isReceptionAllowed,
+      imageUrl: imageUrl ?? this.imageUrl,
+    );
+  }
 }
 
 enum Gender {
