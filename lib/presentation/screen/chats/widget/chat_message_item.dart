@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/core/util/date_time_util.dart';
 import 'package:flutter_chat_app/domain/entity/message.dart';
+import 'package:flutter_chat_app/domain/entity/user.dart';
+import 'package:flutter_chat_app/presentation/widget/profile_image_widget.dart';
 
 class ChatMessageItem extends StatelessWidget {
   final Message message;
+  final Future<User?> future;
   final bool showDateDivider;
   final bool showTimestamp;
   final bool isMine;
@@ -11,6 +14,7 @@ class ChatMessageItem extends StatelessWidget {
   const ChatMessageItem({
     super.key,
     required this.message,
+    required this.future,
     required this.showDateDivider,
     required this.showTimestamp,
     required this.isMine,
@@ -71,7 +75,12 @@ class ChatMessageItem extends StatelessWidget {
   }
 
   Widget _buildSenderAvatar() {
-    return CircleAvatar();
+    return FutureBuilder(
+      future: future,
+      builder: (context, snapshot) => ProfileImageWidget(
+        imageUrl: snapshot.data?.imageUrl,
+      ),
+    );
   }
 
   Widget _buildMessageBubble(BuildContext context) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/core/util/date_time_util.dart';
+import 'package:flutter_chat_app/domain/entity/user.dart';
 import 'package:flutter_chat_app/presentation/provider/auth_provider.dart';
 import 'package:flutter_chat_app/presentation/provider/chat_message_provider.dart';
 import 'package:flutter_chat_app/presentation/screen/chats/widget/chat_message_item.dart';
@@ -7,8 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ChatMessageList extends ConsumerWidget {
   final String? chatRoomId;
+  final Future<User?> future;
 
-  const ChatMessageList(this.chatRoomId, {super.key});
+  const ChatMessageList({this.chatRoomId, required this.future, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,6 +37,7 @@ class ChatMessageList extends ConsumerWidget {
 
           return ChatMessageItem(
             message: message,
+            future: future,
             showDateDivider: showDateDivider,
             showTimestamp: showTimestamp,
             isMine: isMine,
