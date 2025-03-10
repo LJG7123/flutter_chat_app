@@ -14,4 +14,6 @@ abstract interface class UserRepository {
   Future<bool> isEmailAvailable(String email);
 
   Future<void> updateToken(String userId, String? token);
+
+  Future<void> updateReceptionAllowed(String userId, bool value);
 }

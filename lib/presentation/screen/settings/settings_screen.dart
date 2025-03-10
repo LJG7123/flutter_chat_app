@@ -40,6 +40,19 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ],
           ),
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('수신 설정'),
+                Switch(
+                  value: user?.isReceptionAllowed ?? false,
+                  onChanged: ref.read(authProvider.notifier).setReceptionAllowed,
+                ),
+              ],
+            ),
+          ),
           InkWell(
             onTap: () {
               ref.read(authProvider.notifier).signOut();

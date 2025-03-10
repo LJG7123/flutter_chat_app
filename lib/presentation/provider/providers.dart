@@ -86,3 +86,6 @@ final getProfileImageUrlUseCase = Provider<GetProfileImageUrlUseCase>(
 final updateTokenUseCaseProvider = Provider<UpdateTokenUseCase>((ref) =>
     UpdateTokenUseCase(
         ref.read(authRepositoryProvider), ref.read(userRepositoryProvider)));
+final setReceptionAllowedUseCaseProvider = Provider<SetReceptionAllowedUseCase>(
+    (ref) => SetReceptionAllowedUseCase(
+        ref.read(authRepositoryProvider), ref.read(userRepositoryProvider)));

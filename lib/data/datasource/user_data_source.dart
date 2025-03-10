@@ -58,4 +58,11 @@ class UserDataSource {
         .doc(userId)
         .update({'fcmToken': token});
   }
+
+  Future<void> updateReceptionAllowed(String userId, bool value) {
+    return _firestore
+        .collection('users')
+        .doc(userId)
+        .update({'isReceptionAllowed': value});
+  }
 }

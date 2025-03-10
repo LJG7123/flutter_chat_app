@@ -74,3 +74,17 @@ class UpdateTokenUseCase {
     return _userRepository.updateToken(uid, token);
   }
 }
+
+class SetReceptionAllowedUseCase {
+  final AuthRepository _authRepository;
+  final UserRepository _userRepository;
+
+  SetReceptionAllowedUseCase(this._authRepository, this._userRepository);
+
+  Future<void> call(bool value) async {
+    final uid = _authRepository.getCurrentUser();
+    if (uid == null) return;
+
+    return _userRepository.updateReceptionAllowed(uid, value);
+  }
+}

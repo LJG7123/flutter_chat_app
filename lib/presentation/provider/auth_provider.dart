@@ -16,6 +16,7 @@ final authProvider = StateNotifierProvider<AuthNotifier, AsyncValue<User?>>(
           ref.read(getProfileImageUrlUseCase),
           ref.read(isEmailAvailableUseCaseProvider),
           ref.read(updateTokenUseCaseProvider),
+          ref.read(setReceptionAllowedUseCaseProvider),
           ref.read(notificationProvider.notifier),
         ));
 
@@ -27,6 +28,7 @@ class AuthNotifier extends StateNotifier<AsyncValue<User?>> {
   final GetProfileImageUrlUseCase getProfileImageUrlUseCase;
   final IsEmailAvailableUseCase isEmailAvailableUseCase;
   final UpdateTokenUseCase updateTokenUseCase;
+  final SetReceptionAllowedUseCase setReceptionAllowedUseCase;
   final NotificationNotifier notification;
 
   AuthNotifier(
@@ -37,6 +39,7 @@ class AuthNotifier extends StateNotifier<AsyncValue<User?>> {
     this.getProfileImageUrlUseCase,
     this.isEmailAvailableUseCase,
     this.updateTokenUseCase,
+    this.setReceptionAllowedUseCase,
     this.notification,
   ) : super(AsyncLoading()) {
     _getCurrentUser();
@@ -63,6 +66,16 @@ class AuthNotifier extends StateNotifier<AsyncValue<User?>> {
     updateTokenUseCase(null);
     await signOutUseCase();
     state = AsyncData(null);
+  }
+
+  Future<void> setReceptionAllowed(bool value) async {
+    if (value) {
+      updateTokenUseCase(await notification.getFcmToken());
+    } else {
+      updateTokenUseCase(null);
+    }
+    await setReceptionAllowedUseCase(value);
+    return _getCurrentUser();
   }
 
   void reloadProfileImage() async {

@@ -54,4 +54,9 @@ class UserRepositoryImpl implements UserRepository {
   Future<void> updateToken(String userId, String? token) {
     return _dataSource.updateToken(userId, token);
   }
+
+  @override
+  Future<void> updateReceptionAllowed(String userId, bool value) {
+    return _dataSource.updateReceptionAllowed(userId, value);
+  }
 }
