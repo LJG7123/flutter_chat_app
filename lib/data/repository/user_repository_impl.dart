@@ -49,4 +49,9 @@ class UserRepositoryImpl implements UserRepository {
 
     return snapshot.count == 0;
   }
+
+  @override
+  Future<void> updateToken(String userId, String? token) {
+    return _dataSource.updateToken(userId, token);
+  }
 }

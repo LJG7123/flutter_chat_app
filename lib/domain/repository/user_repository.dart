@@ -12,4 +12,6 @@ abstract interface class UserRepository {
       String userId, String email, String name, DateTime dob, String gender);
 
   Future<bool> isEmailAvailable(String email);
+
+  Future<void> updateToken(String userId, String? token);
 }

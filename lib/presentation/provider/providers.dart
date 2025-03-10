@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_chat_app/core/notification/notification_manager.dart';
 import 'package:flutter_chat_app/data/datasource/auth_data_source.dart';
 import 'package:flutter_chat_app/data/datasource/chat_data_source.dart';
 import 'package:flutter_chat_app/data/datasource/image_data_source.dart';
@@ -25,6 +28,9 @@ final firebaseAuthProvider =
     Provider<FirebaseAuth>((ref) => FirebaseAuth.instance);
 final firebaseStorageProvider =
     Provider<FirebaseStorage>((ref) => FirebaseStorage.instance);
+final notificationProvider =
+    StateNotifierProvider<NotificationNotifier, StreamSubscription?>(
+        (ref) => NotificationNotifier(ref));
 
 // DataSource Providers
 final userDataSourceProvider = Provider<UserDataSource>(
@@ -77,3 +83,6 @@ final uploadProfileImageUseCase = Provider<UploadProfileImageUseCase>(
     (ref) => UploadProfileImageUseCase(ref.read(imageRepositoryProvider)));
 final getProfileImageUrlUseCase = Provider<GetProfileImageUrlUseCase>(
     (ref) => GetProfileImageUrlUseCase(ref.read(imageRepositoryProvider)));
+final updateTokenUseCaseProvider = Provider<UpdateTokenUseCase>((ref) =>
+    UpdateTokenUseCase(
+        ref.read(authRepositoryProvider), ref.read(userRepositoryProvider)));

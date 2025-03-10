@@ -51,4 +51,11 @@ class UserDataSource {
         .count()
         .get();
   }
+
+  Future<void> updateToken(String userId, String? token) {
+    return _firestore
+        .collection('users')
+        .doc(userId)
+        .update({'fcmToken': token});
+  }
 }

@@ -60,3 +60,17 @@ class GetCurrentUserUseCase {
     return user?.copyWith(imageUrl: url);
   }
 }
+
+class UpdateTokenUseCase {
+  final AuthRepository _authRepository;
+  final UserRepository _userRepository;
+
+  UpdateTokenUseCase(this._authRepository, this._userRepository);
+
+  Future<void> call(String? token) async {
+    final uid = _authRepository.getCurrentUser();
+    if (uid == null) return;
+
+    return _userRepository.updateToken(uid, token);
+  }
+}

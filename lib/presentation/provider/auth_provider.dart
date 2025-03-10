@@ -1,3 +1,4 @@
+import 'package:flutter_chat_app/core/notification/notification_manager.dart';
 import 'package:flutter_chat_app/core/util/validator.dart';
 import 'package:flutter_chat_app/domain/entity/user.dart';
 import 'package:flutter_chat_app/domain/usecase/auth_usecase.dart';
@@ -14,6 +15,8 @@ final authProvider = StateNotifierProvider<AuthNotifier, AsyncValue<User?>>(
           ref.read(getCurrentUserUseCaseProvider),
           ref.read(getProfileImageUrlUseCase),
           ref.read(isEmailAvailableUseCaseProvider),
+          ref.read(updateTokenUseCaseProvider),
+          ref.read(notificationProvider.notifier),
         ));
 
 class AuthNotifier extends StateNotifier<AsyncValue<User?>> {
@@ -23,6 +26,8 @@ class AuthNotifier extends StateNotifier<AsyncValue<User?>> {
   final GetCurrentUserUseCase getCurrentUserUseCase;
   final GetProfileImageUrlUseCase getProfileImageUrlUseCase;
   final IsEmailAvailableUseCase isEmailAvailableUseCase;
+  final UpdateTokenUseCase updateTokenUseCase;
+  final NotificationNotifier notification;
 
   AuthNotifier(
     this.signInUseCase,
@@ -31,6 +36,8 @@ class AuthNotifier extends StateNotifier<AsyncValue<User?>> {
     this.getCurrentUserUseCase,
     this.getProfileImageUrlUseCase,
     this.isEmailAvailableUseCase,
+    this.updateTokenUseCase,
+    this.notification,
   ) : super(AsyncLoading()) {
     _getCurrentUser();
   }
@@ -43,14 +50,17 @@ class AuthNotifier extends StateNotifier<AsyncValue<User?>> {
   Future<void> signIn(String email, String password) async {
     final user = await signInUseCase(email, password);
     state = AsyncData(user);
+    updateTokenUseCase(await notification.getFcmToken());
   }
 
-  Future<void> signUp(String email, String password, DateTime dob, String name, String gender) async {
+  Future<void> signUp(String email, String password, DateTime dob, String name,
+      String gender) async {
     await signUpUseCase(email, password, dob, name, gender);
     await signIn(email, password);
   }
 
   Future<void> signOut() async {
+    updateTokenUseCase(null);
     await signOutUseCase();
     state = AsyncData(null);
   }
