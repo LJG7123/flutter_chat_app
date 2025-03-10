@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/core/util/date_time_util.dart';
 import 'package:flutter_chat_app/domain/entity/chat.dart';
@@ -19,13 +17,14 @@ class UserListItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUser = ref.read(authProvider).value;
 
-    return ImageFiltered(
-      imageFilter: ImageFilter.blur(sigmaX: 2, sigmaY: 0),
-      enabled: !user.isReceptionAllowed,
+    return Opacity(
+      opacity: user.isReceptionAllowed ? 1 : 0.5,
       child: ListTile(
+        tileColor: user.isReceptionAllowed ? null : Colors.grey[200],
         leading: ProfileImageWidget(imageUrl: user.imageUrl),
         title: Text(user.name),
-        subtitle: Text('${user.email} / ${user.gender.label} / ${user.dob.toAge()}'),
+        subtitle:
+            Text('${user.email} / ${user.gender.label} / ${user.dob.toAge()}'),
         onTap: user.id == currentUser?.id
             ? () => _showSnackBar(context, '본인의 아이디입니다.')
             : user.isReceptionAllowed
