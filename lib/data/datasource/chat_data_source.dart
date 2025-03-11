@@ -27,7 +27,8 @@ class ChatDataSource {
     final chatRoomId = (await _firestore.collection('chats').add({
       'participants': [senderId, otherUserId],
       'unreadCount': 0,
-    })).id;
+    }))
+        .id;
 
     return chatRoomId;
   }
@@ -55,5 +56,12 @@ class ChatDataSource {
     });
 
     batch.commit();
+  }
+
+  Future<void> setUnreadCount(String chatRoomId, int count) {
+    return _firestore
+        .collection('chats')
+        .doc(chatRoomId)
+        .update({'unreadCount': count});
   }
 }

@@ -89,3 +89,5 @@ final updateTokenUseCaseProvider = Provider<UpdateTokenUseCase>((ref) =>
 final setReceptionAllowedUseCaseProvider = Provider<SetReceptionAllowedUseCase>(
     (ref) => SetReceptionAllowedUseCase(
         ref.read(authRepositoryProvider), ref.read(userRepositoryProvider)));
+final clearUnreadCountUseCaseProvider = Provider<ClearUnreadCountUseCase>(
+    (ref) => ClearUnreadCountUseCase(ref.read(chatRepositoryProvider)));

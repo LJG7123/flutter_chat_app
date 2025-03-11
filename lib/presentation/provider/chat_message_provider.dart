@@ -12,6 +12,7 @@ final chatMessageProvider = StateNotifierProvider.autoDispose
     ref.read(getMessagesUseCaseProvider),
     ref.read(createChatUseCaseProvider),
     ref.read(sendMessageUseCaseProvider),
+    ref.read(clearUnreadCountUseCaseProvider),
   ),
 );
 
@@ -20,6 +21,7 @@ class ChatMessageNotifier extends StateNotifier<List<Message>> {
   final GetMessagesUseCase getMessagesUseCase;
   final CreateChatUseCase createChatUseCase;
   final SendMessageUseCase sendMessageUseCase;
+  final ClearUnreadCountUseCase clearUnreadCountUseCase;
   StreamSubscription? _subscription;
 
   ChatMessageNotifier(
@@ -27,6 +29,7 @@ class ChatMessageNotifier extends StateNotifier<List<Message>> {
     this.getMessagesUseCase,
     this.createChatUseCase,
     this.sendMessageUseCase,
+    this.clearUnreadCountUseCase,
   ) : super([]) {
     _fetchMessages();
   }
@@ -62,5 +65,13 @@ class ChatMessageNotifier extends StateNotifier<List<Message>> {
     }
 
     return chatId;
+  }
+
+  Future<void> clearUnreadCount(String userId) async {
+    if (chatRoomId == null || state.isEmpty) return;
+
+    if (userId != state.first.senderId) {
+      clearUnreadCountUseCase(chatRoomId!);
+    }
   }
 }

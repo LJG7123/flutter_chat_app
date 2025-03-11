@@ -17,6 +17,12 @@ class ChatMessageList extends ConsumerWidget {
     final messages = ref.watch(chatMessageProvider(chatRoomId));
     final userId = ref.read(authProvider).value?.id;
 
+    if (userId != null) {
+      ref
+          .read(chatMessageProvider(chatRoomId).notifier)
+          .clearUnreadCount(userId);
+    }
+
     return Align(
       alignment: Alignment.topCenter,
       child: ListView.builder(

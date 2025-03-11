@@ -41,3 +41,13 @@ class SendMessageUseCase {
     return _repository.sendMessage(chatRoomId, senderId, content);
   }
 }
+
+class ClearUnreadCountUseCase {
+  final ChatRepository _repository;
+
+  ClearUnreadCountUseCase(this._repository);
+
+  Future<void> call(String chatRoomId) {
+    return _repository.setUnreadCount(chatRoomId, 0);
+  }
+}

@@ -9,4 +9,6 @@ abstract interface class ChatRepository {
   Future<String> createChat(String senderId, String otherUserId);
 
   Future<void> sendMessage(String chatRoomId, String senderId, String content);
+
+  Future<void> setUnreadCount(String chatRoomId, int count);
 }

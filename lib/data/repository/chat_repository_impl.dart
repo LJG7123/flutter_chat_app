@@ -43,4 +43,9 @@ class ChatRepositoryImpl implements ChatRepository {
   Future<void> sendMessage(String chatRoomId, String senderId, String content) {
     return _dataSource.sendMessage(chatRoomId, senderId, content);
   }
+
+  @override
+  Future<void> setUnreadCount(String chatRoomId, int count) {
+    return _dataSource.setUnreadCount(chatRoomId, count);
+  }
 }
